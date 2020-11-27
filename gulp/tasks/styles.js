@@ -7,12 +7,13 @@ import nested from 'postcss-nested'
 import scss from 'postcss-scss'
 import cssImport from 'postcss-import'
 import mixins from 'postcss-mixins'
+import hexrgba from 'postcss-hexrgba'
 const { series, src, dest } = gulp
 
 export const styles = () => {
   return src('./app/assets/styles/styles.scss')
     .pipe(
-      postcss([cssImport, mixins, cssvars(), autoprefixer], {
+      postcss([cssImport, mixins, cssvars(), hexrgba, autoprefixer], {
         parser: scss,
       })
     )
