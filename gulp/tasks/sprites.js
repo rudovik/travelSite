@@ -2,11 +2,24 @@ import gulp from 'gulp'
 import rename from 'gulp-rename'
 import del from 'del'
 import svgSprite from 'gulp-svg-sprite'
+import svg2png from 'gulp-svg2png'
 const { src, dest, series } = gulp
 
 const config = {
+  shape: {
+    spacing: {
+      padding: 1,
+    },
+  },
   mode: {
     css: {
+      variables: {
+        replaceSvgWithPng: function () {
+          return function (sprite, render) {
+            return render(sprite).split('.svg').join('.png')
+          }
+        },
+      },
       sprite: 'sprite.svg',
       render: {
         css: {
@@ -17,6 +30,12 @@ const config = {
   },
 }
 
+const createPngCopy = () => {
+  return src('./app/temp/sprite/css/*.svg')
+    .pipe(svg2png())
+    .pipe(dest('./app/temp/sprite/css'))
+}
+
 export const createSprite = () => {
   return src('./app/assets/images/icons/**/*.svg')
     .pipe(svgSprite(config))
@@ -24,7 +43,7 @@ export const createSprite = () => {
 }
 
 export const copySpriteGraphic = () => {
-  return src('./app/temp/sprite/css/**/*.svg').pipe(
+  return src('./app/temp/sprite/css/**/*.{svg,png}').pipe(
     dest('./app/assets/images/sprites')
   )
 }
@@ -46,6 +65,7 @@ export const endClean = () => {
 export const icons = series(
   beginClean,
   createSprite,
+  createPngCopy,
   copySpriteGraphic,
   copySpriteCSS,
   endClean
