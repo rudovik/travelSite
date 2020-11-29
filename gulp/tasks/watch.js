@@ -3,18 +3,22 @@ import watcher from 'gulp-watch'
 import browserSync, { reload } from 'browser-sync'
 import { styles } from './styles.js'
 import { scripts } from './scripts.js'
-const { series, src, dest } = gulp
+const { series, src } = gulp
 const bs = browserSync.create('My Server')
 
-const reloadRequest = (cb) => {
+export const cssInject = () => {
+  return src('./app/temp/styles/styles.css').pipe(bs.stream())
+}
+
+const triggerReload = (cb) => {
   bs.reload()
   cb()
 }
 
 export const watch = (cb) => {
-  watcher('./app/index.html', series(reloadRequest))
+  watcher('./app/index.html', bs.reload)
   watcher('./app/assets/styles/**/*.scss', series(styles, cssInject))
-  watcher('./app/assets/scripts/**/*.js', series(scripts, reloadRequest))
+  watcher('./app/assets/scripts/**/*.js', series(scripts('dev'), triggerReload))
   bs.init(
     {
       server: {
@@ -23,8 +27,4 @@ export const watch = (cb) => {
     },
     cb
   )
-}
-
-export const cssInject = () => {
-  return src('./app/temp/styles/styles.css').pipe(bs.stream())
 }

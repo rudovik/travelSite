@@ -15,4 +15,14 @@ export const bundle = (cb) => {
   })
 }
 
-export const scripts = series(modernizr, bundle)
+export const scripts = (mode) => {
+  if (mode === 'prod') {
+    webpackConf.optimization.minimize = true
+    webpackConf.mode = 'production'
+  } else if (mode === 'dev') {
+    webpackConf.optimization.minimize = false
+    webpackConf.mode = 'development'
+  }
+
+  return series(modernizr, bundle)
+}
