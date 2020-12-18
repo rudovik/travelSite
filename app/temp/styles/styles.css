@@ -894,7 +894,7 @@ a {
     margin: 0.25rem 0 1rem 0;
   }
 
-/* Do not edit modules/_sprite directly as it is generated automatically by Gulp. Instead edit gulp/templates/sprite.conf hello */
+/* Do not edit modules/_sprite directly as it is generated automatically by Gulp. Instead edit gulp/templates/sprite.conf */
 
 .icon {
           background-image: url('../../assets/images/sprites/sprite-581a1c7a.svg');

@@ -62,6 +62,7 @@ const usemin = () => {
       um({
         css: [rev(), cssnano()],
         js: [rev()],
+        js1: [rev()],
       })
     )
     .pipe(dest('./docs'))
